@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Agentic RL 秋招 · 面试官手册</title><style>
+:root{--ink:#163036;--line:#cfdad5;--green:#126857;--soft:#eef4ee;--bg:#f8faf6;font:16px/1.7 Inter,'Microsoft YaHei UI','PingFang SC',sans-serif;color:var(--ink);background:var(--bg)}*{box-sizing:border-box}body{margin:0}
+header{border-top:5px solid var(--green);border-bottom:1px solid var(--line);background:#fff;padding:18px max(4%,calc((100vw - 1250px)/2));display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+h1{margin:0;font-size:clamp(20px,3vw,32px);letter-spacing:-.035em;line-height:1.4}label{font-size:14px}select,button{font:inherit;cursor:pointer;background:#fff;color:var(--ink);border:1px solid #8ea89d;padding:7px 10px;border-radius:5px}button{background:var(--green);border-color:var(--green);color:white}.tools{display:flex;align-items:center;gap:10px;font-size:14px;flex-wrap:wrap}
+.layout{max-width:1280px;margin:auto;padding:25px 4% 55px;display:grid;grid-template-columns:210px minmax(0,1fr);gap:34px}
+aside{align-self:start;position:sticky;top:8px;max-height:96vh;overflow:auto;padding:2px 8px 16px 0}aside strong{display:block;margin:10px 0 6px;font-size:14px}nav a{display:block;color:#435952;text-decoration:none;font-size:13px;line-height:1.5;padding:5px 8px;border-left:2px solid transparent}nav a[aria-current],nav a:hover{color:var(--green);background:#e6eee6;border-color:var(--green)}
+h2{font-size:clamp(19px,2.1vw,25px);line-height:1.5;margin:16px 0 10px}h3{margin:20px 0 6px;font-size:17px}main{min-width:0}.intro,.card,.policies{background:#fff;border:1px solid var(--line);border-radius:8px;padding:clamp(14px,2.1vw,27px);margin:0 0 16px}.card h2{margin-top:3px}.meta{font-size:13px;color:var(--green);margin:0}.key{border-top:1px solid var(--line);margin-top:16px;padding-top:12px}.key summary{cursor:pointer;color:var(--green);font-weight:650}.key ol{padding-left:1.65em}.key li{margin:4px 0}p{margin:9px 0}code{font:.91em/1.6 Consolas,monospace;background:var(--soft);padding:.1em .22em;overflow-wrap:anywhere}.scroll{overflow:auto}table{font-size:14px;border-collapse:collapse;width:100%;line-height:1.55}td,th{padding:9px 10px;vertical-align:top;text-align:left;border-bottom:1px solid var(--line)}th{background:var(--soft)}a{color:var(--green);text-underline-offset:2px}section,.card{scroll-margin-top:12px}[hidden]{display:none!important}
+@media(max-width:800px){.layout{display:block;padding:18px 4%}aside{position:static;max-height:none;padding:0 0 12px}aside details:not([open]) nav{display:none}aside summary{cursor:pointer}header{padding:14px 4%}td,th{min-width:65px;padding:7px}.tools{gap:6px}}
+@media print{@page{margin:14mm}body{background:#fff;color:#111;font:10.5pt/1.5 sans-serif}header{border:0;padding:0 0 8px}h1{font-size:18pt}.tools,aside,.key summary,#how{display:none}.layout{display:block;padding:0;max-width:none}.intro,.card,.policies{border:0;padding:5px 0;margin:0 0 12px}.card:not(.with-key){break-inside:avoid}.card h2,h2,h3{break-after:avoid}h2,.card h2{font-size:14pt}tr{break-inside:avoid}.scroll{overflow:visible}code{background:none}}
+</style></head><body><header><h1>Agentic RL 秋招 · 面试官手册</h1><div class="tools"><label for="view">选卷</label><select id="view"><option value="overview">组卷与评分</option><option value="A1">A 卷 · 一面</option><option value="A2">A 卷 · 二面</option><option value="B1">B 卷 · 一面</option><option value="B2">B 卷 · 二面</option><option value="all">全部 20 题</option></select><button id="print">打印当前卷</button></div></header><div class="layout"><aside><details id="navbox" open=""><summary>题目目录</summary><nav><a data-index="1" href="#Q01">Q01　哪一组 rollout 真能给策略梯度？</a><a data-index="2" href="#Q02">Q02　一个负优势样本究竟有没有梯度？</a><a data-index="3" href="#Q03">Q03　先做 DPO，还是花钱收在线轨迹？</a><a data-index="4" href="#Q04">Q04　第三步选错，该给前两次查询扣分吗？</a><a data-index="5" href="#Q05">Q05　现场编程：多轮对话的 SFT loss</a><a data-index="6" href="#Q06">Q06　现场编程：乱序组上的 GRPO 更新</a><a data-index="7" href="#Q07">Q07　现场编程：截断处的 GAE</a><a data-index="8" href="#Q08">Q08　现场编程：带重试的分组收集器</a><a data-index="9" href="#Q09">Q09　还没更新，动作的概率比为什么偏离 1？</a><a data-index="10" href="#Q10">Q10　reward 已经满分，任务为什么还没完成？</a><a data-index="11" href="#Q11">Q11　异步化后成功率从 65% 涨到 80%</a><a data-index="12" href="#Q12">Q12　双卡训练为何总是偏向短序列？</a><a data-index="13" href="#Q13">Q13　能根据这次消融决定把 G 减半吗？</a><a data-index="14" href="#Q14">Q14　pass@4 能不能写进单次服务的指标？</a><a data-index="15" href="#Q15">Q15　裁判喜欢长答案，怎样测出原因？</a><a data-index="16" href="#Q16">Q16　拆分数据后，8 个点的收益还站得住吗？</a><a data-index="17" href="#Q17">Q17　用一个失败样本讲清你的个人工作</a><a data-index="18" href="#Q18">Q18　设计一个不会把重试算成新样本的 rollout 服务</a><a data-index="19" href="#Q19">Q19　两张 48 GB 卡能不能全量微调 7B？</a><a data-index="20" href="#Q20">Q20　给多轮退款 Agent 定一份可执行的环境协议</a></nav></details></aside><main><h2 id="viewtitle"></h2><section class="intro" id="how"><p><strong>提请评审的方案</strong>　秋招算法与研究工程岗，20 道原创情境题，两轮技术面各 60 分钟。目标是招到能把一条交互数据变成正确的训练更新、能从失败中设计下一次实验的新人。一次小规模复现也能提供充分的能力证据。公开面经用于校准问题深度，本稿的组卷和评分均为本次设计。</p></section><div id="overview"><section class="policies"><h2>这批学生怎么面</h2><p>每人实答 6 题。面试前按场次交替排 A、B 卷；同一岗位采用相同时间、工具和计分口径。候选人只收当轮题面，面试官保留答案、变化条件和记录表。HTML 中选择「A 卷一面」等组合后，可直接打印当前试卷。</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>轮次</th>
+<th>时间与顺序</th>
+<th>A 卷</th>
+<th>B 卷</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一面 · 原理、编程、排错</td>
+<td>开场 3 分 → 原理 12 分 → 编程 25 分 → 排错 15 分 → 候选人提问 5 分</td>
+<td>Q01、Q05、Q09</td>
+<td>Q02、Q06、Q10</td>
+</tr>
+<tr>
+<td>二面 · 个人工作、实验、系统</td>
+<td>开场 3 分 → 个人项目 18 分 → 实验 18 分 → 系统 16 分 → 候选人提问 5 分</td>
+<td>Q17、Q13、Q18</td>
+<td>Q17、Q16、Q20</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>备用换题。</strong> 原理从 Q01–Q04 选，编程从 Q05–Q08 选，排错从 Q09–Q12 选，实验从 Q13–Q16 选，系统从 Q18–Q20 选；Q17 所有人共答。算法方向可用 Q04 与 Q15，训练系统方向可用 Q08、Q12 与 Q19。岗位侧重点和换题规则在面试前定下。换题沿用该题位的时间、权重与四个得分点。</p>
+<p><strong>编程环境。</strong> 给干净的 Python/PyTorch 环境，允许查张量 API，先读题和预测，再写代码和测试。面试官可从参考程序复制对应样例独立核对。机器不可用时，提供同样的输入，在白板逐行跟踪并记录环境原因。项目讨论接受白板重建、脱敏数值和课程作业；记录候选人亲自复现、实现或仅提出的部分。</p></section><section class="policies"><h2>如何记录与汇总</h2><p>每题有四个独立得分点，各 1 分。候选人给出可核算结果、正确机制或等价可执行方案，即可拿相应分。可以自行纠正错误。中性澄清和更换举例正常计分；若面试官直接给出了某个得分点的答案，在记录中标「已提示」，该点需换一个输入让候选人独立展示后再计。发现问题但没问到时记「未观察」，复核或补问后汇总。各题的追问可用来核实已有分项，不额外加分。</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>题位</th>
+<th style="text-align: right;">权重</th>
+<th>题号 / 原始分（0–4）</th>
+<th>记录一句可核对的事实</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>原理</td>
+<td style="text-align: right;">15</td>
+<td><strong><em>_ / </em></strong>_</td>
+<td>手算结果、条件或反例</td>
+</tr>
+<tr>
+<td>编程</td>
+<td style="text-align: right;">25</td>
+<td><strong><em>_ / </em></strong>_</td>
+<td>正常样例、边界样例、梯度或复杂度</td>
+</tr>
+<tr>
+<td>排错</td>
+<td style="text-align: right;">15</td>
+<td><strong><em>_ / </em></strong>_</td>
+<td>最先取的日志、区分实验及预测</td>
+</tr>
+<tr>
+<td>实验</td>
+<td style="text-align: right;">15</td>
+<td><strong><em>_ / </em></strong>_</td>
+<td>分母、对照、成本或不确定性</td>
+</tr>
+<tr>
+<td>个人项目</td>
+<td style="text-align: right;">15</td>
+<td>Q17 / ____</td>
+<td>个人决定、具体输入、已做验证</td>
+</tr>
+<tr>
+<td>系统</td>
+<td style="text-align: right;">15</td>
+<td><strong><em>_ / </em></strong>_</td>
+<td>状态、预算、失败恢复或测量方法</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>汇总方式。</strong> 各题「原始分 ÷ 4 × 权重」相加，满分 100。例如六项依表得 3、4、3、3、2、3，总分 77.5。编程强、个人贡献证据薄，应在讨论时分别说明。建议首批面完后双人独立复核同一份答案，先核对哪一项给分不同，再审 A/B 卷耗时与难度。分数供部门横向讨论，本稿没有用真实候选人数据校准录用分界。</p></section><section class="policies"><h2>组内对齐评分的两个例子</h2><ul>
+<li><strong>Q09 样例。</strong> 学生正确算出 1.917，提出温度和 tokenizer 两种解释，但只建议降低学习率，拿不到固定前缀上的比较，也未给复测预测。可记 2/4，对应排错题位 7.5/15。若补问后自己设计了对齐原始 logits 的实验，再按实际展示的分项补记。</li>
+<li><strong>Q17 样例。</strong> 学生在 CPU 上复现查价任务，写了动作 mask，能手算一次偏移错误，讲清修复、分母和未验证的分布偏移，并能回答换输入后的预测。四项都有证据可记 4/4；另一位使用过多卡但仅描述团队最终均值，继续用同一组问题核实个人贡献。</li>
+</ul></section><section class="policies"><h2>出题依据</h2><p>Q09、Q10 和 Q13 的数值依据取自课程的微型 Transformer 重放实验、代理奖励日志和组大小消融。Q11 等其余业务日志为命题情境。原始公开面经中，字节帖子记载轨迹与信用分配追问，百度文心帖子记载 GRPO 数据流与 SFT 实现，华为帖子记载 GRPO 伪代码和条件概率来源。各公司岗位与轮次以发帖人自述为限。<a href="https://www.nowcoder.com/feed/main/detail/6d80836574e647d39eb9842dc4131ace">字节面经</a> · <a href="https://m.nowcoder.com/discuss/864605093486682112">百度文心面经</a> · <a href="https://www.nowcoder.com/feed/main/detail/db120ae0156249078ffd635bd66f3772">华为面经</a></p></section></div><div id="cards"><section class="card with-key" data-i="1" id="Q01"><p class="meta">算法原理 · 12 分钟</p><h2>Q01　哪一组 rollout 真能给策略梯度？</h2><p>同一任务独立采样四条轨迹，终局奖励是 [0, 0, 0, 1]。定义优势为组内减均值再除以总体标准差，零方差组的优势置零。手算四个优势，说明它们怎样分配给每条轨迹中的助手动作。另一道题四条全对，第三道题四条全错。三道题放在一起归一化，训练信号会怎样变？你会用什么统计量决定是调难度、改验证器还是继续采样？</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>均值 1/4，总体标准差 √3/4，前三条优势各 −1/√3，赢家 +√3。</li><li>在终奖版 GRPO 中，同一轨迹的有效助手动作共用轨迹优势；工具返回参与后续条件输入。</li><li>全对和全错组的相对奖励梯度均为零，跨题归一化会让简单题和困难题互相充当基线，改变权重。</li><li>分开报全对、全错、混合组的数量和分母，先用已知正反例核查 verifier，再按题型看采样多样性。</li></ol>
+<p><strong>加压追问。</strong> 给定某题独立成功概率 p，G 次采样有信号的概率是多少？期望答出 1−pᴳ−(1−p)ᴳ，并指出共享工具故障会破坏独立性。若候选人认为零优势保证参数不动，问还有哪些损失或优化器状态在更新。</p></details></section><section class="card with-key" data-i="2" id="Q02"><p class="meta">算法原理 · 12 分钟</p><h2>Q02　一个负优势样本究竟有没有梯度？</h2><p>用 PPO 的裁剪目标最大化期望回报，ε=0.2。对优势 +2 和 −2，分别算出 ratio 为 0.6、1.5 时的单项 surrogate，共四个数。任选一项，判断对当前策略 logp 的梯度方向。说明生成样本的策略、当前策略和冻结的参考策略在代码里各提供什么。训练日志显示很多 ratio 越界，你还需要知道什么，才能判断有多少项落在梯度平台上？</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>对正优势，ratio 0.6、1.5 的目标依次为 1.2、2.4。</li><li>对负优势依次为 −1.6、−3.0；后者仍惩罚增加坏动作概率。</li><li>最大化 min(rA, clip(r)A)；以 A=−2、r=1.5 为例，对当前 logp 的导数为 −3，最小化负目标时取反。</li><li>行为策略提供冻结分母，当前策略提供可导分子，参考策略用于约束；要区分越界率和落入平台的比例，需联合看优势符号和越界方向。</li></ol>
+<p><strong>加压追问。</strong> 若整批 old 用更新后的模型重新计算，记录的 ratio 有何假象？相同打分会得到 1，掩盖相对实际行为策略的漂移。能说明下一步该检查哪个 checkpoint 和哪条旧 logp，即可接受不同术语。</p></details></section><section class="card with-key" data-i="3" id="Q03"><p class="meta">算法原理 · 12 分钟</p><h2>Q03　先做 DPO，还是花钱收在线轨迹？</h2><p>你有 2,000 对同题偏好数据、少量工具调用示范和 3,000 次工具调用预算。目标是提高用户任务的一次完成率。对一对偏好，当前模型相对参考模型的序列 logp 差分别为赢家 +0.3、输家 −0.2，β=2。写出 DPO 损失并算出本项近似值。设计一个起步方案，再说明什么观察会让你把下一笔预算从离线学习移到在线 RL。</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>写出 −log σ(β(Δw−Δl))，本例为 −log σ(1)≈0.3133。</li><li>说明序列 logp 用响应中有效模型动作的条件 logp 求和，固定参考与配对条件；检查偏好标签质量。</li><li>设计可行起点，如示范 SFT 建格式、固定偏好对做 DPO，在同任务与同解码预算下分别评估。</li><li>指出离线数据覆盖不到的失败前缀，给出重置环境、独立 verifier 和在线预算分配的实验。</li></ol>
+<p><strong>加压追问。</strong> 如果偏好赢家几乎总是更长，先切哪组数据？接受同长度区间配对、长度受控的人工复核或反事实改写，需说明内容保持一致的办法。若预算改为零，能保留哪些离线检查？</p></details></section><section class="card with-key" data-i="4" id="Q04"><p class="meta">算法原理 · 12 分钟</p><h2>Q04　第三步选错，该给前两次查询扣分吗？</h2><p>查价任务要求在三个动作内查齐 A、B 两家的报价并提交便宜的一家。A 的商品价 9、运费 14；B 的商品价 13、运费 8。轨迹是「查 A → 查 B → 交 A」。写出策略在每一步实际能看见什么，标出环境产生的观测和策略产生的动作。解释一个终局分数怎样影响各步的学习，再设计一对能区分“偏爱第一个选项”和“过度依赖商品价”的输入。</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>初始无报价，第一次查询后只见 A，第二次后才见 A 和 B；总价 23 与 21，提交 A 得零。</li><li>轨迹似然中策略对三次动作打分，环境负责返回报价；离散动作靠 score function 与回报关联。</li><li>区分估计器：原始零回报 REINFORCE 此条奖励项为零；若基线为正则可得负优势。共享终奖不能靠单条样本准确定位哪步致错。</li><li>固定两次有效查询并交换两家的整份报价，使新 A 商品价 13、总价 21，新 B 商品价 9、总价 23。固定偏爱 A 与固定追求低商品价给出不同预测，评估时需控制输入顺序和解码随机性。</li></ol>
+<p><strong>加压追问。</strong> 重复查 A 再碰巧交对 B， verifier 应读哪条记录？读工具执行成功事件及最终选项。若按“每次查询加分”，重复查询可能在耗尽预算前累积分数。</p></details></section><section class="card with-key" data-i="5" id="Q05"><p class="meta">现场编程 · 25 分钟</p><h2>Q05　现场编程：多轮对话的 SFT loss</h2><p>实现 <code>sft_loss(logits, ids, assistant, valid)</code>。输入为 <code>[B,L,V]</code> 的未归一化 logits、<code>[B,L]</code> 的合法 token ID，以及两个同形布尔张量。每行一条连续的因果序列，可左填充或右填充。<code>assistant</code> 标注由模型实际生成的目标 token，包括模型采到的 EOS。返回所有可预测且有效的助手目标的平均交叉熵；若整批没有目标，抛出 <code>ValueError</code>。允许工具 token 作为输入。</p>
+<p>举例说明：一行是「PAD、用户、助手查价、工具报价、助手提交、EOS」。请标出用于打分的 logits 行，再写一个能抓到偏移一位错误的测试。只用常数 logits 的测试够吗？</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>logits 去掉最后一个时间步，目标取 <code>ids[:,1:]</code>。</li><li>动作掩码取目标侧的 assistant 与 valid，预测位置也须 valid；题中有效 logits 行按零起始是 1、3、4。</li><li>在词表上算交叉熵或 log-softmax 后 gather，仅对有效项取均值，空 batch 抛指定异常。</li><li>用非均匀 logits 构造方向敏感的例子，并用左填充、右填充、工具位或梯度断言发现错误。常数 logits 可检验部分 mask 行为，却难发现选错词或时间步。</li></ol>
+<p><strong>加压追问。</strong> 工具报价位为什么可能收到梯度？区分「预测报价的输出行」与「报价作为输入时的 embedding」。接受两种等价实现。典型扣分是把 <code>logits[:,1:]</code> 用来预测同位置目标。<a href="面试官编程参考.py">可运行参考与边界样例</a></p></details></section><section class="card with-key" data-i="6" id="Q06"><p class="meta">现场编程 · 25 分钟</p><h2>Q06　现场编程：乱序组上的 GRPO 更新</h2><p>实现 <code>grpo_loss(new, old, reward, group_id, mask)</code>。<code>new/old</code> 是相同动作的 logp，形状 <code>[N,T]</code>；每条轨迹一个终奖和一个组 ID，形状 <code>[N]</code>。每行至少有一个有效动作，但同题的行可能交错。按题用总体标准差和 1e−6 做标准化，全同奖组优势取零。采用 ε=0.2 的裁剪目标，本题要求<strong>按全批有效动作数取平均</strong>，返回待最小化的标量。仅 <code>new</code> 接受梯度。</p>
+<p>自己构造一个四行 batch，包含一个全同奖组和一个有输赢的组。再选一个负优势样本，把 ratio 调到 1.5，看梯度是否符合你的预测。</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>按 group ID 聚合，不依赖连续布局，奖励数值冻结；总体标准差和零方差处理正确。</li><li>冻结 old，对有效动作求 <code>exp(new−old)</code>，将轨迹优势广播到时间维。</li><li>取两支 surrogate 的最小值再取负，除以全批有效动作数。</li><li>自造全同奖组和负优势样例，验证平台方向、无效位梯度为零、old/reward 无梯度。</li></ol>
+<p><strong>加压追问。</strong> 顺序为组 7、9、7、9，奖励依次为 0、1、1、1。忽略微小量，优势依次为 −1、0、+1、0。第一条 ratio 改为 1.5 时，对该 new logp 的负目标梯度约为 +1.5 除以有效动作数。若候选人直接 reshape 成两行，用该样例重测。<a href="面试官编程参考.py">可运行参考与边界样例</a></p></details></section><section class="card with-key" data-i="7" id="Q07"><p class="meta">现场编程 · 25 分钟</p><h2>Q07　现场编程：截断处的 GAE</h2><p>实现 <code>gae(r, v, next_v, bootstrap, carry, valid, gamma, lam)</code>。前六个参数均为 <code>[B,T]</code>，后三个矩阵为布尔门。<code>bootstrap</code> 表示允许使用真实后继的价值，<code>carry</code> 表示允许连接到同一片段的下一项优势。无效位输出零，目标不参与反传。本题输入均为有限数；拼接两局时边界已标出。解释为什么要有两道门。</p>
+<p>在同一行试算 <code>r=[0,1,3]</code>、<code>v=[.2,.5,.7]</code>、<code>next_v=[.5,.8,100]</code>，三项都有效。第一步正常，第二步是采集截断且真实后继已知，第三步属于新 episode 并真正终止。取 γ=1、λ=0.5，写出预期结果再运行。</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>TD 残差为 r+γ·bootstrap·next_v−v。</li><li>倒序递推时乘 γλ·carry，截断可用末状态价值但不递推至新局。</li><li>无效位返回零且不向前连接，不让 actor 通过优势回传，输入终局后继 100 也能正确屏蔽。</li><li>本例残差 [0.3,1.3,2.3]，优势 [0.95,1.3,2.3]，用包含 padding 或不同 λ 的额外样例验证。</li></ol>
+<p><strong>加压追问。</strong> 如果环境自动 reset 后只给了下一局的初始观测怎么办？应从采集器保存真实末状态或明确处置缺失的 bootstrap；任务预算本身耗尽可定义为真终止。<a href="面试官编程参考.py">可运行参考与边界样例</a></p></details></section><section class="card with-key" data-i="8" id="Q08"><p class="meta">现场编程 · 25 分钟</p><h2>Q08　现场编程：带重试的分组收集器</h2><p>实现生成器 <code>complete_groups(events, G)</code>。有限事件流的每项为 <code>(task, version, sample_id, reward)</code>，ID 为 0 至 G−1，重复投递的内容相同。每凑齐一组，就按完成顺序产出 <code>(task, version, rewards)</code>，其中 rewards 按 sample_id 排序。同一组只能产出一次，流末尾留有缺失 ID 的组不产出。允许使用内存字典，先按单进程设计。</p>
+<p>G=2，输入依次为 <code>(q,1,1,7) (z,1,0,8) (q,1,1,7) (q,2,0,9) (q,1,0,5) (z,1,1,6) (q,1,0,5) (q,1,1,7)</code>。写出输出，并解释如果这项服务运行一整年，你会如何处理内存和重试窗口。</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>键同时含 task、version，不会跨版本拼样本。</li><li>按 sample_id 去重，收齐才 emit，并按 ID 排序。</li><li>先输出 (q,1,[5,7])，后输出 (z,1,[8,6])；末尾的 (q,2) 不完整；已完成组的完整重投不会再次发出。</li><li>说明 pending、completed 的空间代价，以及过期策略、有限重放窗口或有状态持久去重可保证到什么范围。</li></ol>
+<p><strong>加压追问。</strong> 发送成功但写完成标记之前进程死了，单机 set 是否够用？接受事务性 outbox 或下游按幂等键去重，须解释写入顺序与重复消费。正常处理事件哈希操作均摊常数，输出一个完整组还要 O(G)。<a href="面试官编程参考.py">可运行参考与边界样例</a></p></details></section><section class="card with-key" data-i="9" id="Q09"><p class="meta">训练排错 · 15 分钟</p><h2>Q09　还没更新，动作的概率比为什么偏离 1？</h2><p>同一工具调用前缀，rollout 在合法参数 A、B 中采到 B。记录的 old logp 是 −1.84855；learner 在首次 optimizer step 前重算为 −1.19789。权重哈希相同，dropout 已关闭。算出概率比，给出两种能产生这种现象的机制。你只能先取一条轨迹，具体会取哪几个字段、做什么比较，再决定是否开训？</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>算出 exp(−1.19789+1.84855)≈1.917，指出这是选中 B 的比值。</li><li>提出两种机制，例如同串文本经不同模板分词、位置或掩码不同、温度不同、合法词集合不同。</li><li>锁同一前缀的 token ID、动作 ID、位置、版本，比较变换前 logits，再比较温度及约束后的选中动作 logp。</li><li>给出可证伪预测和复测：原始 logits 已对齐时，仅改变温度应能复现差异；对齐采样分布后，检查全部有效位的误差尾部。</li></ol>
+<p><strong>第二段信息，等候选人提出首项检查后再给。</strong> 在这个固定前缀上，两端原始 logits 和合法动作集合完全一致。采样温度 1，重放温度 2。本课程的 CPU 运行对齐后，412 个有效位置的最大 logp 误差约 2.38×10⁻⁷。能在给温度前提出正确诊断顺序即可得分，无需猜中具体的 2。</p></details></section><section class="card with-key" data-i="10" id="Q10"><p class="meta">训练排错 · 15 分钟</p><h2>Q10　reward 已经满分，任务为什么还没完成？</h2><p>一个查价 Agent 先 SFT，再按「只要提交就得 1」在线训练。种子 3 的第一批有 256 条采样轨迹，提交奖励均值 1.000，独立核验成功率 0.875，同题组全是零方差。某条轨迹查到了 A=13+3、B=10+3，最后提交 A。独立核验要求查全两家且选到总价较低者。请解释这些数怎样同时成立，给出改奖励之前最便宜的一项检查，再设计一次能把奖励定义的作用单独测出来的对照。</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>256 条都提交，其中 224 条通过核验；例子选了总价 16 的 A，B 总价 13，故提交奖励为 1、核验为 0。</li><li>同题全同奖使该批奖励优势为零；光看饱和不能断定模型主动学会了利用漏洞。</li><li>给 verifier 输入手算真值、未查齐的侥幸猜中和查齐选错的轨迹，回放真实事件。</li><li>固定 SFT 初值、题目、采样预算、seed、更新方式，仅换训练奖励，独立评估真实核验率与调用成本。</li></ol>
+<p><strong>加压追问。</strong> 还有梯度就一定是错的吗？参考 KL、熵等额外项及优化器历史状态可能造成参数移动。接受候选人要求先查实际 loss 组成。</p></details></section><section class="card with-key" data-i="11" id="Q11"><p class="meta">训练排错 · 15 分钟</p><h2>Q11　异步化后成功率从 65% 涨到 80%</h2><p>同步版本在业务时限内完成全部评估，简单题成功 90/100，困难题成功 40/100。异步版本仍分配简单、困难题各 100 道。同一业务时限内，简单题只返回 80 道，其中成功 72 道；困难题只返回 20 道，其中成功 8 道。报表只统计已返回任务，业务合同规定超时算失败。重算两版可比较的指标，说明差异可能来自哪里。你会怎样验证“异步训练真的更好”？</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>同步 130/200=65%；异步按已返回为 80/100=80%，合同口径为 80/200=40%。</li><li>在已返回样本中两类分别是 90%、40%，与同步对应题型相同，构成从各半变成 80:20；还无法据此得知未返回任务在宽限期内会怎样。</li><li>用同一冻结策略、题集、截止时间回放同步和异步，记录所有已分配任务、延迟、未返回原因。</li><li>若要测训练收益，固定部署评估器与任务分布，比较训练后策略，并监测策略版本年龄、被丢题型及工具调用预算。</li></ol>
+<p><strong>加压追问。</strong> 给迟到结果补算成功，应该改哪份报表？可增加宽限期后最终完成率，同时保留原合同指标。听候选人是否先说明两个分母。</p></details></section><section class="card with-key" data-i="12" id="Q12"><p class="meta">训练排错 · 15 分钟</p><h2>Q12　双卡训练为何总是偏向短序列？</h2><p>某实现对每张卡本地的有效助手 token 求平均 loss，DDP 再对梯度取两卡均值。A 卡有 10 个有效 token，本地均值为 1；B 卡有 90 个，本地均值为 3。目标是让全局每个有效 token 权重相同。算出当前报表值和目标值，推导每个 rank 应反传哪个标量。再处理一张卡全是 padding 的 batch，说明各个 rank 应如何走 collective 和 backward。</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>当前均值 (1+3)/2=2，全局目标 (10×1+90×3)/100=2.8。</li><li>设本地有效 loss 之和为 Sᵣ，全局有效数为 N，DDP 平均梯度时各 rank 应反传 W·Sᵣ/N。</li><li>全局 all-reduce 有效数；空 rank 也参加 collective 和 backward，提供与参数相连的零。</li><li>全局 N=0 时各 rank 统一跳过该次优化并记录，避免除零或一部分 rank 卡住。</li></ol>
+<p><strong>加压追问。</strong> 只修报表汇总能修梯度吗？让候选人构造两个 rank 梯度方向相反的情形。只在显示端加权不会改反传权重；若用梯度累积，还要说清 N 覆盖的累积窗口。</p></details></section><section class="card with-key" data-i="13" id="Q13"><p class="meta">实验与评估 · 18 分钟</p><h2>Q13　能根据这次消融决定把 G 减半吗？</h2><p>同一个三步工具环境，每个训练种子采 15,360 条轨迹、更新 60 批，每批重放两次。G=8 时每批抽 32 道题，G=4 时抽 64 道。模型用单次贪心解码，开发集固定为 256 题。表中是实测成功题数；末两列是训练工具调用总数。</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>seed</th>
+<th style="text-align: right;">G=8 成功</th>
+<th style="text-align: right;">G=4 成功</th>
+<th style="text-align: right;">G=8 调用</th>
+<th style="text-align: right;">G=4 调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td style="text-align: right;">254</td>
+<td style="text-align: right;">250</td>
+<td style="text-align: right;">28,037</td>
+<td style="text-align: right;">27,675</td>
+</tr>
+<tr>
+<td>7</td>
+<td style="text-align: right;">242</td>
+<td style="text-align: right;">243</td>
+<td style="text-align: right;">28,579</td>
+<td style="text-align: right;">28,583</td>
+</tr>
+<tr>
+<td>19</td>
+<td style="text-align: right;">251</td>
+<td style="text-align: right;">220</td>
+<td style="text-align: right;">27,778</td>
+<td style="text-align: right;">27,768</td>
+</tr>
+</tbody>
+</table></div>
+<p>用一句话向负责人报告结果，指明比较的单位。你手上只有这张表，能估计哪种差，若要做按题配对的区间还缺什么？有限预算下你会优先补哪个对照或数据，什么结果会改变你的建议？</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>在相同的 256 道题上，G=4 相对 G=8 依种子少 4、多 1、少 31 题，平均差 −34/(3×256)≈−4.43 个百分点。</li><li>固定了轨迹数和更新数，改变了每题采样数与每批抽题数，实际调用数略有不同。</li><li>要按题配对需保留每个 seed、task、配置的逐题成功与否；同一批 256 题重复使用，768 次判定不能视为 768 道独立任务。</li><li>给出针对 seed 19 的分题检查或预先登记更多种子与锁定留出集，明确何种结果会改变配置选择。</li></ol>
+<p><strong>第二段信息。</strong> seed 19 下 G=8 有 1,530/1,920 个混合奖励组，G=4 有 2,322/3,840 个。有效组总数上升、占比下降，最终成功率下降。只看组数无法建立因果。接受候选人基于当前 dev 临时保留 G=8，也接受以成本/风险为由继续测，按证据打分。</p></details></section><section class="card with-key" data-i="14" id="Q14"><p class="meta">实验与评估 · 18 分钟</p><h2>Q14　pass@4 能不能写进单次服务的指标？</h2><p>同一道题独立采样五次，其中两次核验成功。从这五条中等概率、不放回抽两条，计算「至少一次成功」和「两次都成功」的概率。部署时只能把一个答案交给用户，线上选择器也看不到隐藏真值。团队另报离线 oracle 的 pass@4 很高，请设计评估来决定是否值得上线重试。</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>至少一次为 1−C(3,2)/C(5,2)=0.7。</li><li>两次都成功为 C(2,2)/C(5,2)=0.1，两者均按题计算。</li><li>oracle 的至少一次命中只给机会，线上还需要选出正确结果；要看选择器实际交付成功率，并防止选择器读到隐藏真值。</li><li>各方案在相同任务上比较同预算单次、重试与真实选择器；同时报告调用量、延迟、失败重试相关性。</li></ol>
+<p><strong>加压追问。</strong> 一半题单次必对、一半必错，重复四次、题目难度不变，oracle 成功率多少？仍为 50%。把整体均值 0.5 代入独立同质假设会算出 93.75%。</p></details></section><section class="card with-key" data-i="15" id="Q15"><p class="meta">实验与评估 · 18 分钟</p><h2>Q15　裁判喜欢长答案，怎样测出原因？</h2><p>客服 Agent 用模型裁判给终奖。更新以后平均回答长度翻倍、裁判均分升高，盲审的任务完成率几乎没变。业务目标是完成用户要求的退款，并给出准确说明。请写出一个能被程序验证的成功条件，一个仍需人工判断的条件，以及一个能区分「内容变好」和「裁判偏爱长度」的配对实验。若结果支持后者，怎样验证修复是否有效？</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>规则从交易日志核对订单、用户、金额、净记账次数；解释是否准确易懂可用独立盲评。</li><li>对同一事实和操作结果构造语义等价的长短答案，随机次序、隐去模型身份，控制内容遗漏。</li><li>交叉比对裁判偏好与人工/程序金标，分层看偏差、误接收、误拒绝；均值移动只提供线索。</li><li>修复后在新策略输出、独立留出题与对抗长文上复核，记录实际完成率和生成成本。</li></ol>
+<p><strong>加压追问。</strong> 若短版删掉了关键退款条款，这对样本还能证明纯长度偏好吗？要求重新构造等事实的配对，或把信息完整性单独标注。</p></details></section><section class="card with-key" data-i="16" id="Q16"><p class="meta">实验与评估 · 18 分钟</p><h2>Q16　拆分数据后，8 个点的收益还站得住吗？</h2><p>训练和测试按单条工单随机切分。同一商品的改写、同一订单的对话前缀，以及同一模板生成的工单可能跨集合。已有 100 道配对测试题，B 独对 14 道、A 独对 6 道。负责人想发布“泛化提升 8 个百分点”。先计算当前集合的净改善，再说明你会怎样重切、重训或重测，以及区间按什么单位重采样。</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>现有 100 题配对差 (14−6)/100=8 个百分点，现有表不能恢复两个模型的绝对成功率。</li><li>先定义泛化目标，例如新订单、新商品或新模板，按对应实体或依赖簇切分，做近重复/共享前缀审计。</li><li>若目标测试内容已进入训练或选参，重建独立集合，必要时重训并锁定配置与评估预算。</li><li>用相同任务配对比较；关联工单按用户、订单或模板等合适层级重采样，训练随机性用多个种子单独刻画。</li></ol>
+<p><strong>加压追问。</strong> 若业务确实服务老商品上的新订单，是否一定要按商品全隔离？接受以部署分布定义划分，报告「已见商品的新订单」和「全新商品」两个切片，给出各自样本量。</p></details></section><section class="card with-key" data-i="17" id="Q17"><p class="meta">个人项目 · 18 分钟</p><h2>Q17　用一个失败样本讲清你的个人工作</h2><p>任选自己参与过的一次模型、数据或工程实验。给出任务成功条件、你复用的组件、自己改变的一处实现或配置。用一个具体输入走到错误输出，说明你最初的解释、做过的检查，以及哪个观察改变了你的判断。最后讲一个尚未验证的猜想。可画示意图、手算、写伪代码或展示脱敏记录；课程项目和个人复现都可使用。</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>说清环境/业务约束、成功判据和分母。</li><li>区分个人实现、复用组件与队友工作，能重建一处代码、配置或数据处理决定。</li><li>在一个具体输入上定位失败的阶段，给出实际观察和至少一项做过的区分检查。</li><li>交代调整前后可比条件、剩余竞争解释；面对输入的一处改变能先预测再解释。负结果与正结果同样计分。</li></ol>
+<p><strong>现场核对。</strong> 从候选人刚讲过的例子任选一个变量，例如互换两个工具结果、把同组奖励全置 1、去掉迟到样本。请对方先预测日志哪一列会变，再说明什么观察会推翻预测。若项目细节不便披露，请其用三行合成输入复现同一机制。对没有保存的数字接受合理范围或现场推导，单独记录「尚未测过」。资源规模和成品展示形式不计分。</p></details></section><section class="card with-key" data-i="18" id="Q18"><p class="meta">系统设计 · 16 分钟</p><h2>Q18　设计一个不会把重试算成新样本的 rollout 服务</h2><p>业务每秒发来 20 条轨迹，平均每条调用工具 2 次；工具从开始执行到返回平均 0.6 秒。假定稳定负载且暂不计重试，估算平均在途工具调用数。设计任务、工具、验证器到 learner 的主链路，并处理这个故障：worker 在外部工具已经产生副作用之后、写入完成记录之前掉线。说明如何处理重复调用、奖励归属、版本滞后和尾延迟。</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>工具流量 20×2=40 次/秒，平均在途执行数约 40×0.6=24；这是平均负载，容量还需排队与尾部余量。</li><li>task、episode/sample、group、policy version 与工具调用 ID 可关联，工具输出留作观测，按唯一有效事件核验。</li><li>先持久化逻辑调用及幂等键，重试沿用同一键；不确定是否已执行就查询/对账，写回结果与提交消费具去重语义。</li><li>监测队列和工具 P95、训练数据年龄、超时/丢弃分布及端到端成功率，说明有界并发和截止策略如何影响长任务。</li></ol>
+<p><strong>加压追问。</strong> 工具不支持幂等键，也查不到是否执行成功，能保证既不重复又最终执行吗？说明故障窗口下无法同时保证，选择暂停并转对账或升级处理等业务语义。</p></details></section><section class="card with-key" data-i="19" id="Q19"><p class="meta">系统设计 · 16 分钟</p><h2>Q19　两张 48 GB 卡能不能全量微调 7B？</h2><p>使用十进制 GB。假设 70 亿参数，每参数需要 BF16 权重和梯度各 2 字节、FP32 主权重 4 字节、Adam 两个 FP32 矩共 8 字节。各卡还需存放激活和临时缓冲。先给普通数据并行的每卡下界，再给所有上述状态理想均分到两卡时的每卡下界。提出一个可落地的改法，并指定测什么量来判断相关收益。若 OOM 实际发生在 rollout 阶段，如何改变排查顺序？</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>每参数 16 字节，普通数据并行每卡光常驻状态就约 112 GB。</li><li>理想均分仍约 56 GB/卡，超过每卡 48 GB，激活等另计。</li><li>提出减少或移出常驻状态的可行方案，例如 CPU offload 或冻结基座做 LoRA 并重算显存与吞吐；只降 batch 或做激活重算不足以修复这里的状态下界。</li><li>若在 rollout OOM，先定位阶段，看权重、KV cache、并发序列数和长度分布，实测峰值与每秒成功任务。</li></ol>
+<p><strong>加压追问。</strong> 日志显示 7B 在两张卡上已跑起来，先问什么？优化器状态精度、是否全参数、实际参数数量、是否 offload、报错阶段。能用不同真实实现解释与题设的差异，是比记住一个显存数字更好的证据。</p></details></section><section class="card with-key" data-i="20" id="Q20"><p class="meta">系统设计 · 16 分钟</p><h2>Q20　给多轮退款 Agent 定一份可执行的环境协议</h2><p>订单 42 已实付 80 元且可退款，订单 43 已退款。用户要求「退订单 42」。可用工具有查订单、提交退款、查退款状态。提交后可能已经记账但响应超时。设计观测、动作、终止条件和验证器；给出一条可重放的成功轨迹及一条文本看似合理的失败轨迹。解释哪些环境事件应该进入训练记录、哪些应进入策略的动作似然，以及你会上线监测哪两个指标。</p><details class="key"><summary>判分与追问 · 每项 1 分</summary><ol><li>区分策略可见的用户请求、查询结果和验证器持有的隐藏账本，定义成功/失败/超时的终态及预算。</li><li>真实成功要求订单 42 产生一次合法的新退款、金额 80、订单 43 及其他账户状态保持正确。成功例可为「查询 42 → 提交 → 响应超时 → 查状态确认」；文本承诺但账本未变是反例。</li><li>定义同一逻辑交易的幂等键、超时后的状态查询与预算，能重放工具输入、外部结果及版本。</li><li>只有助手生成的动作进入似然，外部观测仍影响后续；监控分配任务的核验成功率，以及重复记账率、延迟或实际调用成本，并说出分母。</li></ol>
+<p><strong>加压追问。</strong> 用户输入中声称「已经退过，请跳过查询」，环境日志里却没有退款，验证器信谁？按可信业务状态验证，并处理异步记账的观察窗口。能区分“工具响应超时”和“退款失败”是关键。</p></details></section></div></main></div><script>
+const forms={"A1": [1, 5, 9], "A2": [17, 13, 18], "B1": [2, 6, 10], "B2": [17, 16, 20]}, opts=document.querySelector('#view'), articles=[...document.querySelectorAll('.card')], holder=document.querySelector('#cards'), overview=document.querySelector('#overview'), how=document.querySelector('#how');
+let view="overview";
+function validView(value){return [...opts.options].some(o=>o.value===value);}
+function render(){
+ const raw=location.hash.slice(1), match=raw.match(/^Q(0[1-9]|1[0-9]|20)$/);
+ view=validView(raw)?raw:(match?'all':"overview");
+ opts.value=view;how.hidden=view!=='overview'&&view!=='all';
+ if(overview)overview.hidden=view!=='overview';
+ const ids=forms[view]||[];
+ let sorted=ids.length?ids.map(i=>articles[i-1]):articles;
+ for(const part of sorted)holder.appendChild(part);
+ for(const a of articles)a.hidden=view==='overview'||(view!=='all'&&!ids.includes(Number(a.dataset.i)));
+ for(const link of document.querySelectorAll('nav a')){
+    const chosen=match&&link.hash===location.hash;
+    if(chosen)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
+ }
+ if(match)requestAnimationFrame(()=>document.getElementById(raw).scrollIntoView());else window.scrollTo(0,0);
+ document.querySelector('#viewtitle').textContent=opts.selectedOptions[0].text;
+}
+opts.addEventListener('change',()=>{location.hash=opts.value});window.addEventListener('hashchange',render);
+document.querySelector('#print').addEventListener('click',()=>window.print());
+let closed=[];
+window.addEventListener('beforeprint',()=>{closed=[...document.querySelectorAll('.card:not([hidden]) details:not([open])')];closed.forEach(d=>d.open=true)});
+window.addEventListener('afterprint',()=>closed.forEach(d=>d.open=false));
+if(matchMedia('(max-width:800px)').matches)document.getElementById('navbox').open=false;
+render();
+</script></body></html>

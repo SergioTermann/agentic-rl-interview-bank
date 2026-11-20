@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Agentic RL 秋招 · 候选人题面</title><style>
+:root{--ink:#163036;--line:#cfdad5;--green:#126857;--soft:#eef4ee;--bg:#f8faf6;font:16px/1.7 Inter,'Microsoft YaHei UI','PingFang SC',sans-serif;color:var(--ink);background:var(--bg)}*{box-sizing:border-box}body{margin:0}
+header{border-top:5px solid var(--green);border-bottom:1px solid var(--line);background:#fff;padding:18px max(4%,calc((100vw - 1250px)/2));display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+h1{margin:0;font-size:clamp(20px,3vw,32px);letter-spacing:-.035em;line-height:1.4}label{font-size:14px}select,button{font:inherit;cursor:pointer;background:#fff;color:var(--ink);border:1px solid #8ea89d;padding:7px 10px;border-radius:5px}button{background:var(--green);border-color:var(--green);color:white}.tools{display:flex;align-items:center;gap:10px;font-size:14px;flex-wrap:wrap}
+.layout{max-width:1280px;margin:auto;padding:25px 4% 55px;display:grid;grid-template-columns:210px minmax(0,1fr);gap:34px}
+aside{align-self:start;position:sticky;top:8px;max-height:96vh;overflow:auto;padding:2px 8px 16px 0}aside strong{display:block;margin:10px 0 6px;font-size:14px}nav a{display:block;color:#435952;text-decoration:none;font-size:13px;line-height:1.5;padding:5px 8px;border-left:2px solid transparent}nav a[aria-current],nav a:hover{color:var(--green);background:#e6eee6;border-color:var(--green)}
+h2{font-size:clamp(19px,2.1vw,25px);line-height:1.5;margin:16px 0 10px}h3{margin:20px 0 6px;font-size:17px}main{min-width:0}.intro,.card,.policies{background:#fff;border:1px solid var(--line);border-radius:8px;padding:clamp(14px,2.1vw,27px);margin:0 0 16px}.card h2{margin-top:3px}.meta{font-size:13px;color:var(--green);margin:0}.key{border-top:1px solid var(--line);margin-top:16px;padding-top:12px}.key summary{cursor:pointer;color:var(--green);font-weight:650}.key ol{padding-left:1.65em}.key li{margin:4px 0}p{margin:9px 0}code{font:.91em/1.6 Consolas,monospace;background:var(--soft);padding:.1em .22em;overflow-wrap:anywhere}.scroll{overflow:auto}table{font-size:14px;border-collapse:collapse;width:100%;line-height:1.55}td,th{padding:9px 10px;vertical-align:top;text-align:left;border-bottom:1px solid var(--line)}th{background:var(--soft)}a{color:var(--green);text-underline-offset:2px}section,.card{scroll-margin-top:12px}[hidden]{display:none!important}
+@media(max-width:800px){.layout{display:block;padding:18px 4%}aside{position:static;max-height:none;padding:0 0 12px}aside details:not([open]) nav{display:none}aside summary{cursor:pointer}header{padding:14px 4%}td,th{min-width:65px;padding:7px}.tools{gap:6px}}
+@media print{@page{margin:14mm}body{background:#fff;color:#111;font:10.5pt/1.5 sans-serif}header{border:0;padding:0 0 8px}h1{font-size:18pt}.tools,aside,.key summary,#how{display:none}.layout{display:block;padding:0;max-width:none}.intro,.card,.policies{border:0;padding:5px 0;margin:0 0 12px}.card:not(.with-key){break-inside:avoid}.card h2,h2,h3{break-after:avoid}h2,.card h2{font-size:14pt}tr{break-inside:avoid}.scroll{overflow:visible}code{background:none}}
+</style></head><body><header><h1>Agentic RL 秋招 · 候选人题面</h1><div class="tools"><label for="view">选卷</label><select id="view"><option value="A1">A 卷 · 一面</option><option value="A2">A 卷 · 二面</option><option value="B1">B 卷 · 一面</option><option value="B2">B 卷 · 二面</option><option value="all">全部 20 题</option></select><button id="print">打印当前卷</button></div></header><div class="layout"><aside><details id="navbox" open=""><summary>题目目录</summary><nav><a data-index="1" href="#Q01">Q01　哪一组 rollout 真能给策略梯度？</a><a data-index="2" href="#Q02">Q02　一个负优势样本究竟有没有梯度？</a><a data-index="3" href="#Q03">Q03　先做 DPO，还是花钱收在线轨迹？</a><a data-index="4" href="#Q04">Q04　第三步选错，该给前两次查询扣分吗？</a><a data-index="5" href="#Q05">Q05　现场编程：多轮对话的 SFT loss</a><a data-index="6" href="#Q06">Q06　现场编程：乱序组上的 GRPO 更新</a><a data-index="7" href="#Q07">Q07　现场编程：截断处的 GAE</a><a data-index="8" href="#Q08">Q08　现场编程：带重试的分组收集器</a><a data-index="9" href="#Q09">Q09　还没更新，动作的概率比为什么偏离 1？</a><a data-index="10" href="#Q10">Q10　reward 已经满分，任务为什么还没完成？</a><a data-index="11" href="#Q11">Q11　异步化后成功率从 65% 涨到 80%</a><a data-index="12" href="#Q12">Q12　双卡训练为何总是偏向短序列？</a><a data-index="13" href="#Q13">Q13　能根据这次消融决定把 G 减半吗？</a><a data-index="14" href="#Q14">Q14　pass@4 能不能写进单次服务的指标？</a><a data-index="15" href="#Q15">Q15　裁判喜欢长答案，怎样测出原因？</a><a data-index="16" href="#Q16">Q16　拆分数据后，8 个点的收益还站得住吗？</a><a data-index="17" href="#Q17">Q17　用一个失败样本讲清你的个人工作</a><a data-index="18" href="#Q18">Q18　设计一个不会把重试算成新样本的 rollout 服务</a><a data-index="19" href="#Q19">Q19　两张 48 GB 卡能不能全量微调 7B？</a><a data-index="20" href="#Q20">Q20　给多轮退款 Agent 定一份可执行的环境协议</a></nav></details></aside><main><h2 id="viewtitle"></h2><section class="intro" id="how"><p>适用方向为大模型后训练、工具智能体与强化学习研究工程。题面中的业务和日志用作面试情境。可以说明自己的假设，使用纸笔、伪代码或约定的编程环境。编程题使用 Python，张量题可用 PyTorch。涉及个人项目时，可用公开项目、课程作业、论文复现或脱敏例子。</p></section><div id="cards"><section class="card" data-i="1" id="Q01"><p class="meta">算法原理 · 12 分钟</p><h2>Q01　哪一组 rollout 真能给策略梯度？</h2><p>同一任务独立采样四条轨迹，终局奖励是 [0, 0, 0, 1]。定义优势为组内减均值再除以总体标准差，零方差组的优势置零。手算四个优势，说明它们怎样分配给每条轨迹中的助手动作。另一道题四条全对，第三道题四条全错。三道题放在一起归一化，训练信号会怎样变？你会用什么统计量决定是调难度、改验证器还是继续采样？</p></section><section class="card" data-i="2" id="Q02"><p class="meta">算法原理 · 12 分钟</p><h2>Q02　一个负优势样本究竟有没有梯度？</h2><p>用 PPO 的裁剪目标最大化期望回报，ε=0.2。对优势 +2 和 −2，分别算出 ratio 为 0.6、1.5 时的单项 surrogate，共四个数。任选一项，判断对当前策略 logp 的梯度方向。说明生成样本的策略、当前策略和冻结的参考策略在代码里各提供什么。训练日志显示很多 ratio 越界，你还需要知道什么，才能判断有多少项落在梯度平台上？</p></section><section class="card" data-i="3" id="Q03"><p class="meta">算法原理 · 12 分钟</p><h2>Q03　先做 DPO，还是花钱收在线轨迹？</h2><p>你有 2,000 对同题偏好数据、少量工具调用示范和 3,000 次工具调用预算。目标是提高用户任务的一次完成率。对一对偏好，当前模型相对参考模型的序列 logp 差分别为赢家 +0.3、输家 −0.2，β=2。写出 DPO 损失并算出本项近似值。设计一个起步方案，再说明什么观察会让你把下一笔预算从离线学习移到在线 RL。</p></section><section class="card" data-i="4" id="Q04"><p class="meta">算法原理 · 12 分钟</p><h2>Q04　第三步选错，该给前两次查询扣分吗？</h2><p>查价任务要求在三个动作内查齐 A、B 两家的报价并提交便宜的一家。A 的商品价 9、运费 14；B 的商品价 13、运费 8。轨迹是「查 A → 查 B → 交 A」。写出策略在每一步实际能看见什么，标出环境产生的观测和策略产生的动作。解释一个终局分数怎样影响各步的学习，再设计一对能区分“偏爱第一个选项”和“过度依赖商品价”的输入。</p></section><section class="card" data-i="5" id="Q05"><p class="meta">现场编程 · 25 分钟</p><h2>Q05　现场编程：多轮对话的 SFT loss</h2><p>实现 <code>sft_loss(logits, ids, assistant, valid)</code>。输入为 <code>[B,L,V]</code> 的未归一化 logits、<code>[B,L]</code> 的合法 token ID，以及两个同形布尔张量。每行一条连续的因果序列，可左填充或右填充。<code>assistant</code> 标注由模型实际生成的目标 token，包括模型采到的 EOS。返回所有可预测且有效的助手目标的平均交叉熵；若整批没有目标，抛出 <code>ValueError</code>。允许工具 token 作为输入。</p>
+<p>举例说明：一行是「PAD、用户、助手查价、工具报价、助手提交、EOS」。请标出用于打分的 logits 行，再写一个能抓到偏移一位错误的测试。只用常数 logits 的测试够吗？</p></section><section class="card" data-i="6" id="Q06"><p class="meta">现场编程 · 25 分钟</p><h2>Q06　现场编程：乱序组上的 GRPO 更新</h2><p>实现 <code>grpo_loss(new, old, reward, group_id, mask)</code>。<code>new/old</code> 是相同动作的 logp，形状 <code>[N,T]</code>；每条轨迹一个终奖和一个组 ID，形状 <code>[N]</code>。每行至少有一个有效动作，但同题的行可能交错。按题用总体标准差和 1e−6 做标准化，全同奖组优势取零。采用 ε=0.2 的裁剪目标，本题要求<strong>按全批有效动作数取平均</strong>，返回待最小化的标量。仅 <code>new</code> 接受梯度。</p>
+<p>自己构造一个四行 batch，包含一个全同奖组和一个有输赢的组。再选一个负优势样本，把 ratio 调到 1.5，看梯度是否符合你的预测。</p></section><section class="card" data-i="7" id="Q07"><p class="meta">现场编程 · 25 分钟</p><h2>Q07　现场编程：截断处的 GAE</h2><p>实现 <code>gae(r, v, next_v, bootstrap, carry, valid, gamma, lam)</code>。前六个参数均为 <code>[B,T]</code>，后三个矩阵为布尔门。<code>bootstrap</code> 表示允许使用真实后继的价值，<code>carry</code> 表示允许连接到同一片段的下一项优势。无效位输出零，目标不参与反传。本题输入均为有限数；拼接两局时边界已标出。解释为什么要有两道门。</p>
+<p>在同一行试算 <code>r=[0,1,3]</code>、<code>v=[.2,.5,.7]</code>、<code>next_v=[.5,.8,100]</code>，三项都有效。第一步正常，第二步是采集截断且真实后继已知，第三步属于新 episode 并真正终止。取 γ=1、λ=0.5，写出预期结果再运行。</p></section><section class="card" data-i="8" id="Q08"><p class="meta">现场编程 · 25 分钟</p><h2>Q08　现场编程：带重试的分组收集器</h2><p>实现生成器 <code>complete_groups(events, G)</code>。有限事件流的每项为 <code>(task, version, sample_id, reward)</code>，ID 为 0 至 G−1，重复投递的内容相同。每凑齐一组，就按完成顺序产出 <code>(task, version, rewards)</code>，其中 rewards 按 sample_id 排序。同一组只能产出一次，流末尾留有缺失 ID 的组不产出。允许使用内存字典，先按单进程设计。</p>
+<p>G=2，输入依次为 <code>(q,1,1,7) (z,1,0,8) (q,1,1,7) (q,2,0,9) (q,1,0,5) (z,1,1,6) (q,1,0,5) (q,1,1,7)</code>。写出输出，并解释如果这项服务运行一整年，你会如何处理内存和重试窗口。</p></section><section class="card" data-i="9" id="Q09"><p class="meta">训练排错 · 15 分钟</p><h2>Q09　还没更新，动作的概率比为什么偏离 1？</h2><p>同一工具调用前缀，rollout 在合法参数 A、B 中采到 B。记录的 old logp 是 −1.84855；learner 在首次 optimizer step 前重算为 −1.19789。权重哈希相同，dropout 已关闭。算出概率比，给出两种能产生这种现象的机制。你只能先取一条轨迹，具体会取哪几个字段、做什么比较，再决定是否开训？</p></section><section class="card" data-i="10" id="Q10"><p class="meta">训练排错 · 15 分钟</p><h2>Q10　reward 已经满分，任务为什么还没完成？</h2><p>一个查价 Agent 先 SFT，再按「只要提交就得 1」在线训练。种子 3 的第一批有 256 条采样轨迹，提交奖励均值 1.000，独立核验成功率 0.875，同题组全是零方差。某条轨迹查到了 A=13+3、B=10+3，最后提交 A。独立核验要求查全两家且选到总价较低者。请解释这些数怎样同时成立，给出改奖励之前最便宜的一项检查，再设计一次能把奖励定义的作用单独测出来的对照。</p></section><section class="card" data-i="11" id="Q11"><p class="meta">训练排错 · 15 分钟</p><h2>Q11　异步化后成功率从 65% 涨到 80%</h2><p>同步版本在业务时限内完成全部评估，简单题成功 90/100，困难题成功 40/100。异步版本仍分配简单、困难题各 100 道。同一业务时限内，简单题只返回 80 道，其中成功 72 道；困难题只返回 20 道，其中成功 8 道。报表只统计已返回任务，业务合同规定超时算失败。重算两版可比较的指标，说明差异可能来自哪里。你会怎样验证“异步训练真的更好”？</p></section><section class="card" data-i="12" id="Q12"><p class="meta">训练排错 · 15 分钟</p><h2>Q12　双卡训练为何总是偏向短序列？</h2><p>某实现对每张卡本地的有效助手 token 求平均 loss，DDP 再对梯度取两卡均值。A 卡有 10 个有效 token，本地均值为 1；B 卡有 90 个，本地均值为 3。目标是让全局每个有效 token 权重相同。算出当前报表值和目标值，推导每个 rank 应反传哪个标量。再处理一张卡全是 padding 的 batch，说明各个 rank 应如何走 collective 和 backward。</p></section><section class="card" data-i="13" id="Q13"><p class="meta">实验与评估 · 18 分钟</p><h2>Q13　能根据这次消融决定把 G 减半吗？</h2><p>同一个三步工具环境，每个训练种子采 15,360 条轨迹、更新 60 批，每批重放两次。G=8 时每批抽 32 道题，G=4 时抽 64 道。模型用单次贪心解码，开发集固定为 256 题。表中是实测成功题数；末两列是训练工具调用总数。</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>seed</th>
+<th style="text-align: right;">G=8 成功</th>
+<th style="text-align: right;">G=4 成功</th>
+<th style="text-align: right;">G=8 调用</th>
+<th style="text-align: right;">G=4 调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td style="text-align: right;">254</td>
+<td style="text-align: right;">250</td>
+<td style="text-align: right;">28,037</td>
+<td style="text-align: right;">27,675</td>
+</tr>
+<tr>
+<td>7</td>
+<td style="text-align: right;">242</td>
+<td style="text-align: right;">243</td>
+<td style="text-align: right;">28,579</td>
+<td style="text-align: right;">28,583</td>
+</tr>
+<tr>
+<td>19</td>
+<td style="text-align: right;">251</td>
+<td style="text-align: right;">220</td>
+<td style="text-align: right;">27,778</td>
+<td style="text-align: right;">27,768</td>
+</tr>
+</tbody>
+</table></div>
+<p>用一句话向负责人报告结果，指明比较的单位。你手上只有这张表，能估计哪种差，若要做按题配对的区间还缺什么？有限预算下你会优先补哪个对照或数据，什么结果会改变你的建议？</p></section><section class="card" data-i="14" id="Q14"><p class="meta">实验与评估 · 18 分钟</p><h2>Q14　pass@4 能不能写进单次服务的指标？</h2><p>同一道题独立采样五次，其中两次核验成功。从这五条中等概率、不放回抽两条，计算「至少一次成功」和「两次都成功」的概率。部署时只能把一个答案交给用户，线上选择器也看不到隐藏真值。团队另报离线 oracle 的 pass@4 很高，请设计评估来决定是否值得上线重试。</p></section><section class="card" data-i="15" id="Q15"><p class="meta">实验与评估 · 18 分钟</p><h2>Q15　裁判喜欢长答案，怎样测出原因？</h2><p>客服 Agent 用模型裁判给终奖。更新以后平均回答长度翻倍、裁判均分升高，盲审的任务完成率几乎没变。业务目标是完成用户要求的退款，并给出准确说明。请写出一个能被程序验证的成功条件，一个仍需人工判断的条件，以及一个能区分「内容变好」和「裁判偏爱长度」的配对实验。若结果支持后者，怎样验证修复是否有效？</p></section><section class="card" data-i="16" id="Q16"><p class="meta">实验与评估 · 18 分钟</p><h2>Q16　拆分数据后，8 个点的收益还站得住吗？</h2><p>训练和测试按单条工单随机切分。同一商品的改写、同一订单的对话前缀，以及同一模板生成的工单可能跨集合。已有 100 道配对测试题，B 独对 14 道、A 独对 6 道。负责人想发布“泛化提升 8 个百分点”。先计算当前集合的净改善，再说明你会怎样重切、重训或重测，以及区间按什么单位重采样。</p></section><section class="card" data-i="17" id="Q17"><p class="meta">个人项目 · 18 分钟</p><h2>Q17　用一个失败样本讲清你的个人工作</h2><p>任选自己参与过的一次模型、数据或工程实验。给出任务成功条件、你复用的组件、自己改变的一处实现或配置。用一个具体输入走到错误输出，说明你最初的解释、做过的检查，以及哪个观察改变了你的判断。最后讲一个尚未验证的猜想。可画示意图、手算、写伪代码或展示脱敏记录；课程项目和个人复现都可使用。</p></section><section class="card" data-i="18" id="Q18"><p class="meta">系统设计 · 16 分钟</p><h2>Q18　设计一个不会把重试算成新样本的 rollout 服务</h2><p>业务每秒发来 20 条轨迹，平均每条调用工具 2 次；工具从开始执行到返回平均 0.6 秒。假定稳定负载且暂不计重试，估算平均在途工具调用数。设计任务、工具、验证器到 learner 的主链路，并处理这个故障：worker 在外部工具已经产生副作用之后、写入完成记录之前掉线。说明如何处理重复调用、奖励归属、版本滞后和尾延迟。</p></section><section class="card" data-i="19" id="Q19"><p class="meta">系统设计 · 16 分钟</p><h2>Q19　两张 48 GB 卡能不能全量微调 7B？</h2><p>使用十进制 GB。假设 70 亿参数，每参数需要 BF16 权重和梯度各 2 字节、FP32 主权重 4 字节、Adam 两个 FP32 矩共 8 字节。各卡还需存放激活和临时缓冲。先给普通数据并行的每卡下界，再给所有上述状态理想均分到两卡时的每卡下界。提出一个可落地的改法，并指定测什么量来判断相关收益。若 OOM 实际发生在 rollout 阶段，如何改变排查顺序？</p></section><section class="card" data-i="20" id="Q20"><p class="meta">系统设计 · 16 分钟</p><h2>Q20　给多轮退款 Agent 定一份可执行的环境协议</h2><p>订单 42 已实付 80 元且可退款，订单 43 已退款。用户要求「退订单 42」。可用工具有查订单、提交退款、查退款状态。提交后可能已经记账但响应超时。设计观测、动作、终止条件和验证器；给出一条可重放的成功轨迹及一条文本看似合理的失败轨迹。解释哪些环境事件应该进入训练记录、哪些应进入策略的动作似然，以及你会上线监测哪两个指标。</p></section></div></main></div><script>
+const forms={"A1": [1, 5, 9], "A2": [17, 13, 18], "B1": [2, 6, 10], "B2": [17, 16, 20]}, opts=document.querySelector('#view'), articles=[...document.querySelectorAll('.card')], holder=document.querySelector('#cards'), overview=document.querySelector('#overview'), how=document.querySelector('#how');
+let view="A1";
+function validView(value){return [...opts.options].some(o=>o.value===value);}
+function render(){
+ const raw=location.hash.slice(1), match=raw.match(/^Q(0[1-9]|1[0-9]|20)$/);
+ view=validView(raw)?raw:(match?'all':"A1");
+ opts.value=view;how.hidden=view!=='overview'&&view!=='all';
+ if(overview)overview.hidden=view!=='overview';
+ const ids=forms[view]||[];
+ let sorted=ids.length?ids.map(i=>articles[i-1]):articles;
+ for(const part of sorted)holder.appendChild(part);
+ for(const a of articles)a.hidden=view==='overview'||(view!=='all'&&!ids.includes(Number(a.dataset.i)));
+ for(const link of document.querySelectorAll('nav a')){
+    const chosen=match&&link.hash===location.hash;
+    if(chosen)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
+ }
+ if(match)requestAnimationFrame(()=>document.getElementById(raw).scrollIntoView());else window.scrollTo(0,0);
+ document.querySelector('#viewtitle').textContent=opts.selectedOptions[0].text;
+}
+opts.addEventListener('change',()=>{location.hash=opts.value});window.addEventListener('hashchange',render);
+document.querySelector('#print').addEventListener('click',()=>window.print());
+let closed=[];
+window.addEventListener('beforeprint',()=>{closed=[...document.querySelectorAll('.card:not([hidden]) details:not([open])')];closed.forEach(d=>d.open=true)});
+window.addEventListener('afterprint',()=>closed.forEach(d=>d.open=false));
+if(matchMedia('(max-width:800px)').matches)document.getElementById('navbox').open=false;
+render();
+</script></body></html>
