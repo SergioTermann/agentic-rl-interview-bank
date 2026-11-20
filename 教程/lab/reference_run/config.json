@@ -1,0 +1,23 @@
+{
+  "methods": [
+    "rule",
+    "random",
+    "sft",
+    "grpo",
+    "sft-grpo",
+    "sft-proxy"
+  ],
+  "seeds": [
+    3,
+    7,
+    19
+  ],
+  "steps": 60,
+  "batch": 32,
+  "group": 8,
+  "demos": 16,
+  "beta": 0.01,
+  "output": "lab\\reference_run",
+  "cases": false,
+  "torch": "2.10.0+cu128"
+}
